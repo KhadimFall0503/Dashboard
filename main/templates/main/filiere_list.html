@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{% block title %}Filières{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 space-y-6">
+
+  <h1 class="text-4xl font-extrabold mb-8 text-center text-gradient-to-r from-indigo-400 via-pink-500 to-purple-500">
+    Filières
+  </h1>
+
+  <!-- Barre de recherche -->
+  <div class="mb-8 w-full sm:w-1/2 mx-auto">
+    <form method="get" class="flex gap-2">
+      <input type="text" name="q" value="{{ request.GET.q|default:'' }}"
+             placeholder="Rechercher une filière..."
+             class="flex-1 px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500">
+      <button type="submit" class="px-5 py-2 bg-blue-500 rounded-xl hover:from-purple-500 hover:to-indigo-500 transition text-white font-semibold">
+        🔍 Rechercher
+      </button>
+    </form>
+  </div>
+
+  <!-- Filières sous forme de cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {% for filiere in filieres %}
+    <div class="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 p-6 rounded-3xl shadow-2xl transform hover:-translate-y-2 hover:scale-105 transition duration-300">
+      <div class="flex items-center gap-4 mb-4">
+        <i class="fas fa-layer-group text-blue-500 text-3xl"></i>
+        <h2 class="text-2xl font-bold text-white">{{ filiere.nom }}</h2>
+      </div>
+      <p class="text-gray-300 mb-5">{{ filiere.description|default:"Pas de description" }}</p>
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium bg-blue-500 text-white px-4 py-2 rounded-full shadow-md">{{ filiere.duree }} ans</span>
+        <span class="text-sm font-medium bg-dark text-white px-4 py-2 rounded-full shadow-md">{{ filiere.code }}</span>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-gray-400 col-span-full text-center">Aucune filière trouvée.</p>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

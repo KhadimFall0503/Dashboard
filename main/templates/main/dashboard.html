@@ -1,0 +1,126 @@
+{% extends "main/base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex flex-col min-h-screen bg-gray-900 text-gray-100">
+
+  <!-- Contenu principal -->
+  <main class="flex-1 flex flex-col p-6 space-y-8">
+
+    <!-- Statistiques -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex justify-between items-center hover:scale-105 hover:bg-gray-700 transition-transform duration-300">
+        <div>
+          <p class="text-xs uppercase opacity-70">Étudiants</p>
+          <p class="text-3xl font-bold">{{ nb_etudiants }}</p>
+        </div>
+        <i class="fas fa-user-graduate fa-3x text-indigo-400"></i>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex justify-between items-center hover:scale-105 hover:bg-gray-700 transition-transform duration-300">
+        <div>
+          <p class="text-xs uppercase opacity-70">Filières</p>
+          <p class="text-3xl font-bold">{{ nb_filieres }}</p>
+        </div>
+        <i class="fas fa-book fa-3x text-indigo-400"></i>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex justify-between items-center hover:scale-105 hover:bg-gray-700 transition-transform duration-300">
+        <div>
+          <p class="text-xs uppercase opacity-70">Inscriptions</p>
+          <p class="text-3xl font-bold">{{ nb_inscriptions }}</p>
+        </div>
+        <i class="fas fa-clipboard-list fa-3x text-indigo-400"></i>
+      </div>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="w-full sm:w-1/2">
+      <form method="get" class="flex gap-2">
+        <input type="text" name="q" value="{{ request.GET.q|default:'' }}"
+               placeholder="Rechercher un étudiant..."
+               class="flex-1 px-4 py-2 rounded-xl bg-gray-800 border border-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500">
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition">
+          🔍 Rechercher
+        </button>
+      </form>
+    </div>
+
+    <!-- Étudiants -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-4 text-indigo-400">Étudiants</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-700 text-sm">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold uppercase">Prénom</th>
+              <th class="px-4 py-3 text-left font-semibold uppercase">Nom</th>
+              <th class="px-4 py-3 text-left font-semibold uppercase">Email</th>
+              <th class="px-4 py-3 text-left font-semibold uppercase">Téléphone</th>
+              <th class="px-4 py-3 text-center font-semibold uppercase">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-700">
+            {% for etudiant in etudiants %}
+            <tr class="hover:bg-gray-700 transition">
+              <td class="px-4 py-2">{{ etudiant.prenom }}</td>
+              <td class="px-4 py-2">{{ etudiant.nom }}</td>
+              <td class="px-4 py-2">{{ etudiant.email }}</td>
+              <td class="px-4 py-2">{{ etudiant.telephone|default:"-" }}</td>
+              <td class="px-4 py-2 text-center">
+                <a href="{% url 'etudiant_detail' etudiant.id %}" 
+                   class="text-indigo-400 hover:text-indigo-500 transition">
+                  <i class="fas fa-eye"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="px-4 py-2 text-center text-gray-400">Aucun étudiant</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Filières sous forme de cards -->
+    <div>
+      <h2 class="text-2xl font-bold mb-4 text-indigo-400">Filières</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {% for filiere in filieres %}
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 hover:bg-gray-700 transition-transform duration-300 flex flex-col justify-between">
+          <div class="flex items-center gap-3 mb-3">
+            <i class="fas fa-book-open text-indigo-400 text-3xl"></i>
+            <h3 class="text-lg font-semibold">{{ filiere.nom }}</h3>
+          </div>
+          <p class="text-gray-400 text-sm mb-3">{{ filiere.description|default:"Pas de description"|truncatewords:20 }}</p>
+          <span class="text-sm font-medium bg-indigo-600 text-white px-3 py-1 rounded w-max">{{ filiere.duree }} ans</span>
+        </div>
+        {% empty %}
+        <p class="text-gray-400">Aucune filière</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Inscriptions -->
+    <div>
+      <h2 class="text-2xl font-bold mb-4 text-indigo-400">Inscriptions</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {% for inscription in inscriptions %}
+        <div class="bg-gray-700 p-4 rounded-xl shadow-lg flex justify-between items-center hover:bg-gray-600 transition">
+          <div class="flex flex-col">
+            <p class="font-semibold text-white">{{ inscription.etudiant.nom }} {{ inscription.etudiant.prenom }}</p>
+            <p class="text-gray-400 text-sm">{{ inscription.filiere.nom }}</p>
+          </div>
+          <span class="text-gray-400 text-sm">{{ inscription.annee_academique }}</span>
+        </div>
+        {% empty %}
+        <p class="text-gray-400">Aucune inscription</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}
