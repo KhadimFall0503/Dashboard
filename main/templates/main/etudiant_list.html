@@ -2,14 +2,26 @@
 {% block title %}Liste des Étudiants{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto mt-8 p-6 bg-gray-900 text-white rounded-2xl shadow-xl">
+<div class="max-w-7xl mx-auto mt-8 p-6 bg-white rounded-2xl shadow-lg">
 
-  <h1 class="text-4xl font-extrabold mb-8 text-center text-indigo-400">Liste des Étudiants</h1>
+  <!-- Header simple -->
+  <h1 class="text-4xl font-extrabold mb-6 text-indigo-600 text-center sm:text-left">Liste des Étudiants</h1>
 
-  <!-- Table responsive -->
-  <div class="overflow-x-auto rounded-lg border border-gray-700">
-    <table class="min-w-full divide-y divide-gray-700 text-sm">
-      <thead class="bg-gray-800">
+  <!-- Barre de recherche -->
+  <form method="get" class="mb-6 flex flex-col sm:flex-row gap-3">
+    <input type="text" name="q" value="{{ request.GET.q|default:'' }}"
+           placeholder="Rechercher un étudiant..."
+           class="flex-1 px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
+    >
+    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition">
+      Rechercher
+    </button>
+  </form>
+
+  <!-- Tableau responsive moderne -->
+  <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50">
         <tr>
           <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Prénom</th>
           <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Nom</th>
@@ -20,9 +32,9 @@
           <th class="px-6 py-3 text-center font-semibold uppercase tracking-wider">Action</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-700">
+      <tbody class="divide-y divide-gray-100">
         {% for etudiant in etudiants %}
-        <tr class="hover:bg-gray-800 transition duration-200 ease-in-out">
+        <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
           <td class="px-6 py-3">{{ etudiant.prenom }}</td>
           <td class="px-6 py-3">{{ etudiant.nom }}</td>
           <td class="px-6 py-3">{{ etudiant.date_naissance|date:"d/m/Y" }}</td>
@@ -31,7 +43,7 @@
           <td class="px-6 py-3">{{ etudiant.date_creation|date:"d/m/Y H:i" }}</td>
           <td class="px-6 py-3 text-center">
             <a href="{% url 'etudiant_detail' etudiant.id %}" 
-               class="text-indigo-400 hover:text-indigo-500 transition">
+               class="text-indigo-600 hover:text-indigo-700 transition">
               <i class="fas fa-eye"></i>
             </a>
           </td>
@@ -47,15 +59,21 @@
 
   <!-- Pagination -->
   {% if is_paginated %}
-  <div class="mt-6 flex justify-center space-x-2">
+  <div class="mt-6 flex justify-center items-center space-x-2">
     {% if page_obj.has_previous %}
       <a href="?page={{ page_obj.previous_page_number }}" 
-         class="px-4 py-2 bg-indigo-600 rounded-xl hover:bg-indigo-500 transition">Précédent</a>
+         class="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition">Précédent</a>
+    {% else %}
+      <span class="px-4 py-2 bg-gray-200 text-gray-400 rounded-xl">Précédent</span>
     {% endif %}
-    <span class="px-4 py-2 bg-gray-800 rounded-xl">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+    <span class="px-4 py-2 bg-gray-100 text-gray-800 rounded-xl">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
     {% if page_obj.has_next %}
       <a href="?page={{ page_obj.next_page_number }}" 
-         class="px-4 py-2 bg-indigo-600 rounded-xl hover:bg-indigo-500 transition">Suivant</a>
+         class="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition">Suivant</a>
+    {% else %}
+      <span class="px-4 py-2 bg-gray-200 text-gray-400 rounded-xl">Suivant</span>
     {% endif %}
   </div>
   {% endif %}

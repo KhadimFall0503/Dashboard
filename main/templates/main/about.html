@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% block title %}À propos - School Manager{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto py-12 px-4 space-y-8">
+
+  <!-- Section principale avec texte et image -->
+  <div class="bg-gray-800 p-8 rounded-2xl shadow-xl text-center space-y-6">
+    
+    <!-- Texte au-dessus de l'image -->
+    <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-400">
+      Bienvenue sur School Manager
+    </h1>
+    
+    <p class="text-gray-300 text-sm md:text-lg max-w-3xl mx-auto">
+      School Manager est une application de gestion scolaire complète,
+      permettant de gérer les étudiants, les filières et les inscriptions.
+      Développée avec <strong>Django</strong> et <strong>Tailwind CSS</strong> pour un design moderne et responsive.
+    </p>
+    
+    <!-- Image large mais hauteur réduite -->
+    <img src="{% static 'main/school.png' %}" alt="School Manager"
+         class="w-full max-h-72 object-cover rounded-lg shadow-lg">
+    
+  </div>
+
+</div>
+{% endblock %}

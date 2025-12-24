@@ -1,0 +1,62 @@
+{% extends "main/base.html" %}
+
+{% block title %}Liste des inscriptions{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 p-6 bg-white text-gray-900 rounded-2xl shadow-xl">
+
+  <!-- En-tête -->
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+    <h1 class="text-3xl font-extrabold text-indigo-600 flex items-center gap-3">
+      <i class="fas fa-list"></i>
+      Inscriptions
+    </h1>
+
+    <a href="{% url 'inscription_add' %}"
+       class="px-4 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2 text-white">
+      <i class="fas fa-plus"></i> Nouvelle inscription
+    </a>
+  </div>
+
+  <!-- Table responsive -->
+  <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50 text-gray-700">
+        <tr>
+          <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Étudiant</th>
+          <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Filière</th>
+          <th class="px-6 py-3 text-left font-semibold uppercase tracking-wider">Année académique</th>
+          <th class="px-6 py-3 text-center font-semibold uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200">
+        {% for inscription in object_list %}
+        <tr class="hover:bg-gray-100 transition">
+          <td class="px-6 py-3">{{ inscription.etudiant }}</td>
+          <td class="px-6 py-3">{{ inscription.filiere }}</td>
+          <td class="px-6 py-3">{{ inscription.annee_academique }}</td>
+          <td class="px-6 py-3 text-center flex justify-center gap-3">
+            <a href="{% url 'inscription_edit' inscription.id %}"
+               class="text-indigo-600 hover:text-indigo-500 transition">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a href="{% url 'inscription_delete' inscription.id %}"
+               class="text-red-600 hover:text-red-500 transition">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="px-6 py-6 text-center text-gray-400">
+            Aucune inscription trouvée
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}
